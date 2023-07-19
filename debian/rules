@@ -3,6 +3,8 @@
 
 export PYBUILD_NAME=pytest
 
+DEB_BUILD_OPTIONS=nodoc
+
 # 2015-12-16 barry@debian.org: Because pytest does not clean up after itself,
 # use a custom temporary directory (which is easier to clean up manually,
 # e.g. in an sbuild).
@@ -23,7 +25,7 @@ export PYBUILD_TEST_ARGS=BREAK_COMMAND_ON_PURPOSE >/dev/null 2>&1; \
 
 execute_after_dh_auto_build:
 ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
-	PYTHONPATH=$(shell pybuild --print {build_dir}) \
+	PYTHONPATH="$(shell pybuild --print {build_dir})" \
 		SPHINXBUILD=/usr/share/sphinx/scripts/python3/sphinx-build \
 		$(MAKE) -C doc/en man html
 endif
